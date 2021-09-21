@@ -26,7 +26,7 @@ struct __digitPositioning{
 #define INCREMENT_TIME_AMMO_100 20 // Same as above, applies to preset setup when ammo count is > 100
 #define INCREMENT_TIME_AMMO_500 1 // Same as above, applies to preset setup when ammo count is > 1000
 #define PRESET_EDIT_HOLD_TIME 750 //When the button is held for this amount of millis, the preset editor change speed will increase
-#define BATT_MEASURMENT_INTERVAL 1000 //Interval between battery voltage sampling (in ms)
+#define BATT_MEASURMENT_INTERVAL 250 //Interval between battery voltage sampling (in ms)
 #define BUTTON_DEBOUNCE_INTERVAL 4
 #define _PRESET_COUNT 6 //do not change this
 #define FACTORY_RESET_CONFIRMATIONS 6 //How many times must the factory reset button be pressed in order to activate

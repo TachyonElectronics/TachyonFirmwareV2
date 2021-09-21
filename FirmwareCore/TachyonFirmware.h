@@ -12,6 +12,10 @@
 #include "../Pins.h"
 #include "Macros.h"
 
+#ifdef HAS_MAGNETOMETER
+#include "../Magnetometer/LSM303AGR.h"
+#endif
+
 DECLARE_BUTTON(BTN_LEFT)
 DECLARE_BUTTON(BTN_CENTER)
 DECLARE_BUTTON(BTN_RIGHT)

@@ -40,6 +40,10 @@ bool queuedTimeSave;
 bool fireDebounce = 0;
 bool updateCurrentPresetNextLoop;
 
+#ifdef HAS_MAGNETOMETER
+LSM303AGR mag = LSM303AGR();
+#endif
+
 #pragma endregion
 
 
@@ -119,15 +123,19 @@ void setup()
 	delay(50);
 	setBrightness(brightness);
 	
+	
+	//TODO: Add compile time branch for V3
 	//Setup pin change interrupt
-	PCICR |= _BV(PCIE1);// | _BV(PCIE2); //Enable pc interrupt 1 (pins PCINT8-14)
+	PCICR |= _BV(PCIE1) | _BV(PCIE3);// | _BV(PCIE2); //Enable pc interrupt 1 (pins PCINT8-14)
 	PCMSK1 |= _BV(PCINT8) | _BV(PCINT9) | _BV(PCINT10); //Mask PC interrupt pins so inly buttons are enabled
+	PCMSK3 = _BV(PCINT27);
 	//PCMSK2 |= _BV(PCINT17);
 	
 	ammo = settings.presets[currentPreset] < 0? 0 : settings.presets[currentPreset];
 
-
-	PORTC |= (1 << PINC0) | (1 << PINC1) | (1 << PINC2); //pull up side buttons
+	//TODO: Add compile time branch for V3
+	PORTE |= 1 << PINE3;
+	PORTC |= (1 << PINC0) | (1 << PINC1); //pull up side buttons
 	//PORTD |= _BV(RLD);
 	
 
@@ -141,6 +149,11 @@ void setup()
 	disp.setTextColor(settings.uiColor, settings.bgColor);
 	displayMainScreen();
 	updateAmmoNextLoop = true;
+	
+	#ifdef HAS_MAGNETOMETER
+	mag.init();
+	#endif
+	
 	sei();
 }
 
@@ -302,8 +315,11 @@ void loop()
 		//Battery measurement
 		if(currentMillis > battMeasurementMillis + BATT_MEASURMENT_INTERVAL)
 		{
-			updateBattery();
+			//updateBattery();
 			updateTime();
+			disp.setCursor(0,100);
+			disp.print(mag.getBearing());
+			disp.print(' ');
 		}
 		
 		//Center button at main screen
@@ -436,6 +452,12 @@ ISR(PCINT1_vect)
 ISR(PCINT2_vect)
 {
 
+}
+ISR(PCINT3_vect)
+{
+	HANDLE_BUTTON_INTERRUPT(BTN_CENTER,PINREGISTER_BTN_CENTER,PIN_BTN_CENTER);
+	HANDLE_BUTTON_INTERRUPT(BTN_LEFT,PINREGISTER_BTN_LEFT,PIN_BTN_LEFT);
+	HANDLE_BUTTON_INTERRUPT(BTN_RIGHT,PINREGISTER_BTN_RIGHT,PIN_BTN_RIGHT);
 }
 
 void fire()

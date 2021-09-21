@@ -68,9 +68,46 @@
 #define DSP_CS 8
 #define DSP_RST 10
 
-//Throw a compilation error if target board is not a Tachyon
+/*====================================================
+							V3
+======================================================*/
+
+//TODO:: 
+//#elif defined(ARDUINO_TACHYON_V2)
 #else
-#error Build target not supported. Please select a compatible Tachyon board
+
+#define PINREGISTER_BTN_CENTER PINC
+#define PIN_BTN_CENTER PINC0
+
+#define PINREGISTER_BTN_LEFT PINC
+#define PIN_BTN_LEFT PINC1
+
+#define PINREGISTER_BTN_RIGHT PINE
+#define PIN_BTN_RIGHT PINE3
+
+#define BTN_RELOAD_INTERRUPT 0
+#define PINREGISTER_BTN_RELOAD PIND
+#define PIN_BTN_RELOAD PIND2
+
+#define BATTERY_ADC_CHANNEL 3
+
+#define SENSOR_INTERRUPT 1
+#define PINREGISTER_SENSOR PIND
+#define PIN_SENSOR PIND3
+
+#define DSP_BL 5
+#define DSP_CS 8
+#define DSP_RST 10
+
+#define SPCR SPCR0
+#define SPSR SPSR0
+
+#define HAS_MAGNETOMETER
+
+//TODO: uncomment
+//Throw a compilation error if target board is not a Tachyon
+//#else
+//#error Build target not supported. Please select a compatible Tachyon board
 #endif
 
 #endif /* PINS_H_ */
